@@ -1,0 +1,163 @@
+Step: build-step-credential-initializer:
+
+{"level":"warn","ts":1551971958.6586585,"logger":"fallback-logger","caller":"logging/config.go:65","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/test\" is not a valid GitHub commit ID"}
+{"level":"info","ts":1551971958.6600833,"logger":"fallback-logger","caller":"creds-init/main.go:40","msg":"Credentials initialized."}
+Step: build-step-git-source-0:
+
+{"level":"warn","ts":1551971959.6577199,"logger":"fallback-logger","caller":"logging/config.go:65","msg":"Fetch GitHub commit ID from kodata failed: \"ref: refs/heads/test\" is not a valid GitHub commit ID"}
+{"level":"info","ts":1551971961.1798003,"logger":"fallback-logger","caller":"git-init/main.go:92","msg":"Successfully cloned \"https://github.com/Woap/croc-hunter-jenkinsx-serverless.git\" @ \"9e09bed04665de6044d368036f387d0c092784a5\" in path \"/workspace\""}
+Step: build-step-jenkins:
+
+Picked up _JAVA_OPTIONS: -Xmx400m
+Started
+Running in Durability level: PERFORMANCE_OPTIMIZED
+  57.749 [id=35]	WARNING	i.f.k.c.i.VersionUsageUtils#alert: The client is using resource type 'customresourcedefinitions' with unstable version 'v1beta1'
+[Pipeline] node
+Running on Jenkins in /tmp/jenkinsTests.tmp/jenkins367953800115156224test/workspace/job
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (Declarative: Checkout SCM)
+[Pipeline] checkout
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] withCredentials
+[Pipeline] {
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] stage
+[Pipeline] { (CI Build and push snapshot)
+[Pipeline] withEnv
+[Pipeline] {
+[Pipeline] dir
+Running in /home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless
+[Pipeline] {
+[Pipeline] checkout
+[Pipeline] sh
++ make VERSION=0.0.0-SNAPSHOT-PR-3-2 GIT_COMMIT=9e09bed04665de6044d368036f387d0c092784a5 linux
+cp skaffold.yaml skaffold.yaml.new
+sed -i -e "s/{{.VERSION}}/0.0.0-SNAPSHOT-PR-3-2/" skaffold.yaml.new
+sed -i -e "s/{{.GIT_COMMIT}}/9e09bed04665de6044d368036f387d0c092784a5/" skaffold.yaml.new
+CGO_ENABLED=0 GOOS=linux GOARCH=amd64 GO15VENDOREXPERIMENT=1 go build -ldflags '' -o bin/croc-hunter-jenkinsx croc-hunter.go
+[Pipeline] sh
++ export VERSION=0.0.0-SNAPSHOT-PR-3-2
++ skaffold build -f skaffold.yaml.new
+time="2019-03-07T15:21:25Z" level=warning msg="config version (skaffold/v1beta1) out of date: upgrading to latest (skaffold/v1beta3)"
+Starting build...
+Building [changeme]...
+Sending build context to Docker daemon  525.8kBSending build context to Docker daemon  4.425MBSending build context to Docker daemon   6.99MB
+Step 1/10 : FROM scratch
+ ---> 
+Step 2/10 : ARG GIT_SHA
+ ---> Using cache
+ ---> 4dcdeb8153f0
+Step 3/10 : ARG WORKFLOW_RELEASE
+ ---> Using cache
+ ---> eff201aac8f3
+Step 4/10 : ENV GIT_SHA $GIT_SHA
+ ---> Running in 33d8913ec71c
+ ---> 4da4774ccbe0
+Step 5/10 : ENV WORKFLOW_RELEASE $WORKFLOW_RELEASE
+ ---> Running in e589d6dda739
+ ---> 104f644cb522
+Step 6/10 : ENV POWERED_BY Jenkins-X
+ ---> Running in 6eab58ce7b4f
+ ---> c73fdf29262c
+Step 7/10 : EXPOSE 8080
+ ---> Running in 27ec8b968ba9
+ ---> 48f6c73e78f6
+Step 8/10 : ENTRYPOINT /croc-hunter-jenkinsx
+ ---> Running in 6acd738bcbab
+ ---> 1c5dd2614b9a
+Step 9/10 : COPY ./bin/ /
+ ---> a9e2601ae6f6
+Step 10/10 : COPY static/ static/
+ ---> b5dc359cc83a
+Successfully built b5dc359cc83a
+The push refers to a repository [10.19.242.223:5000/carlossg/croc-hunter-jenkinsx]
+11957f2bf44b: Preparing
+d4ce7b0ee400: Preparing
+11957f2bf44b: Pushed
+d4ce7b0ee400: Pushed
+0.0.0-SNAPSHOT-PR-3-2: digest: sha256:4516583e790ea8e848416ce360d7f82e4765a4106367920a431da6a660e902d1 size: 738
+Build complete in 3.040781646s
+Starting test...
+Test complete in 7.412µs
+changeme -> 10.19.242.223:5000/carlossg/croc-hunter-jenkinsx:0.0.0-SNAPSHOT-PR-3-2
+[Pipeline] sh
++ jx step validate --min-jx-version 1.2.36
+[Pipeline] sh
++ jx step post build --image 10.19.242.223:5000/carlossg/croc-hunter-jenkinsx:0.0.0-SNAPSHOT-PR-3-2
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] dir
+Running in /home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/charts/preview
+[Pipeline] {
+[Pipeline] sh
++ make preview
+sed -i -e "s/version:.*/version: 0.0.0-SNAPSHOT-PR-3-2/" Chart.yaml
+sed -i -e "s/version:.*/version: 0.0.0-SNAPSHOT-PR-3-2/" ../*/Chart.yaml
+sed -i -e "s|repository: .*|repository: 10.19.242.223:5000\/carlossg\/golang-http|" values.yaml
+sed -i -e "s/tag: .*/tag: 0.0.0-SNAPSHOT-PR-3-2/" values.yaml
+echo "  version: 0.0.0-SNAPSHOT-PR-3-2" >> requirements.yaml
+jx step helm build
+No $CHART_REPOSITORY defined so using the default value of: http://jenkins-x-chartmuseum:8080
+Adding missing Helm repo: releases http://jenkins-x-chartmuseum:8080
+Successfully added Helm repository releases.
+Adding missing Helm repo: jenkins-x http://chartmuseum.jenkins-x.io
+Successfully added Helm repository jenkins-x.
+Adding missing Helm repo: repo5 https://chartmuseum.build.cd.jenkins-x.io
+Successfully added Helm repository repo5.
+[Pipeline] sh
++ jx preview --app croc-hunter-jenkinsx --dir ../..
+Creating a preview
+Commit author email is empty for: 3a0401907027cb7be94084a343fad81a945e3002
+Looking for commits in: /home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/
+Commit not found: 3a0401907027cb7be94084a343fad81a945e3002
+Commit author email is empty for: 9e09bed04665de6044d368036f387d0c092784a5
+Looking for commits in: /home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/
+Commit author email is empty for: 8542a98fc3366fc36434810932754b4a149a7f51
+Looking for commits in: /home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/
+Commit not found: 8542a98fc3366fc36434810932754b4a149a7f51
+Commit author email is empty for: 5b29d194d34719b8f20c453802977467270111d1
+Looking for commits in: /home/jenkins/go/src/github.com/carlossg/croc-hunter-jenkinsx-serverless/
+Commit not found: 5b29d194d34719b8f20c453802977467270111d1
+Found commit author match for: Woap with email address: ibis@etu.unistra.fr
+expose:
+  Annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: hook-succeeded
+  config:
+    domain: 34.76.128.72.nip.io
+    exposer: Ingress
+    http: "true"
+preview:
+  image:
+    repository: 10.19.242.223:5000/carlossg/croc-hunter-jenkinsx
+    tag: 0.0.0-SNAPSHOT-PR-3-2
+Failed to update PipelineActivities woap-croc-hunter-jenkinsx-serverless-pr-3-2: the namespace of the object (jx-woap-croc-hunter-jenkinsx-serverless-pr-3) does not match the namespace on the request (jx)
+Preview application is now available at: http://croc-hunter-jenkinsx.jx-woap-croc-hunter-jenkinsx-serverless-pr-3.34.76.128.72.nip.io
+
+[Pipeline] }
+[Pipeline] // dir
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Build Release)
+Stage "Build Release" skipped due to when conditional
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] stage
+[Pipeline] { (Promote to Environments)
+Stage "Promote to Environments" skipped due to when conditional
+[Pipeline] }
+[Pipeline] // stage
+[Pipeline] }
+[Pipeline] // withEnv
+[Pipeline] }
+[Pipeline] // withCredentials
+[Pipeline] }
+[Pipeline] // node
+[Pipeline] End of Pipeline
+Finished: SUCCESS
